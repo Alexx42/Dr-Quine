@@ -4,10 +4,10 @@
 #include <strings.h>
 #define COMPILE "clang -Wall -Werror -Wextra %s -o Sully_%d"
 #define EXECUTE "./Sully_%d"
-#define SELF "#include<stdio.h>%c#include <stdlib.h>%c#include <fcntl.h>%c#include <strings.h>%c#define COMPILE %cclang -Wall -Werror -Wextra %%s -o Sully_%%d%c%c#define EXECUTE %c./Sully_%%d%c%c#define SELF %c%s%c%cint main() {%cint i = %d;%cif (!i) return (0);%cchar *file;%cchar *compile;%cchar *execute;%cint fd;%casprintf(&file, %cSully_%%d.c%c, i - 1);%cfd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);%cif (fd < 0) return (1);%casprintf(&compile, COMPILE, file, i - 1);%casprintf(&execute, EXECUTE, i - 1);%cdprintf(fd, SELF, 10, 10, 10, 10, 34, 34, 10, 34, 34, 10, 34, SELF, 34, 10, 10, i - 1, 10, 10, 10, 10, 10, 10, 34, 34, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);%csystem(compile);%csystem(execute);%creturn (0);%c}%c"
+#define SELF "#include<stdio.h>%c#include <stdlib.h>%c#include <fcntl.h>%c#include <strings.h>%c#define COMPILE %cclang -Wall -Werror -Wextra %%s -o Sully_%%d%c%c#define EXECUTE %c./Sully_%%d%c%c#define SELF %c%s%c%cint main() {%cint i = %d;%cif (i < 0) return (0);%cchar *file;%cchar *compile;%cchar *execute;%cint fd;%casprintf(&file, %cSully_%%d.c%c, i);%cfd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);%cif (fd < 0) return (1);%casprintf(&compile, COMPILE, file, i);%casprintf(&execute, EXECUTE, i);%cdprintf(fd, SELF, 10, 10, 10, 10, 34, 34, 10, 34, 34, 10, 34, SELF, 34, 10, 10, i - 1, 10, 10, 10, 10, 10, 10, 34, 34, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);%csystem(compile);%csystem(execute);%creturn (0);%c}%c"
 int main() {
 int i = 5;
-if (!i) return (0);
+if (i < 0) return (0);
 char *file;
 char *compile;
 char *execute;
