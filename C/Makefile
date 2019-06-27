@@ -23,7 +23,8 @@ $(SULLY): Sully.c
 	@$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	
+	@rm -f Grace_kid.c
+
 fclean: clean
 	@rm -f $(COLLEEN) $(GRACE) $(SULLY)
 
