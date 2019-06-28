@@ -7,7 +7,7 @@ GRACE		+=		Grace
 
 SULLY		+=		Sully
 
-all: $(COLLEEN)
+all: $(GRACE)
 
 $(COLLEEN): Colleen.s
 	@$(ASM) $(ASMFLAGS) $^
