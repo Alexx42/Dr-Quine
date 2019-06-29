@@ -7,7 +7,7 @@ GRACE		+=		Grace
 
 SULLY		+=		Sully
 
-all: $(GRACE)
+all: $(GRACE) $(COLLEEN)
 
 $(COLLEEN): Colleen.s
 	@$(ASM) $(ASMFLAGS) $^
@@ -22,7 +22,7 @@ $(SULLY): Sully.s
 	@$(CC) -o $@ Sully.o
 
 clean:
-	@rm -f Grace_kid.s Sully_*
+	@rm -f Sully.o Grace.o Colleen.o Grace_kid.s
 
 fclean: clean
 	@rm -f $(COLLEEN) $(GRACE) $(SULLY)
