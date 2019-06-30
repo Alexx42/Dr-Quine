@@ -1,8 +1,9 @@
 section .data
 file db "Sully_%d.s",0
+base db "Sully_5.s",0
 compile db "nasm -f macho64 Sully_%d.s",0
 execute db "gcc Sully_%1$d.o -o Sully_%1$d && ./Sully_%1$d",0
-msg db "section .data%2$cfile db %3$cSully_%%d.s%3$c,0%2$ccompile db %3$cnasm -f macho64 Sully_%%d.s%3$c,0%2$cexecute db %3$cgcc Sully_%%1$d.o -o Sully_%%1$d && ./Sully_%%1$d%3$c,0%2$cmsg db %3$c%1$s%3$c,0%2$c%2$csection .text%2$cglobal start%2$cglobal _main%2$cextern _system%2$cextern _sprintf%2$cextern _dprintf%2$c%2$cstart:%2$c_main:%2$cpush rbp%2$cmov rbp,rsp%2$csub rsp,16%2$cmov r14,1%2$cmov r13,%4$d%2$ccmp r13,-1%2$cje end%2$c%2$clea rsi,[rel file]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$c%2$cmov rax,0x2000005%2$cmov rdi,rsp%2$cmov rsi,512+1024+2%2$cmov rdx,0644o%2$csyscall%2$ccmp rax,-1%2$cje error%2$cleave%2$c%2$cpush rax%2$cmov rdi,rax%2$clea rsi,[rel msg]%2$clea rdx,[rel msg]%2$cmov rcx,10%2$cmov r8,34%2$ccmp r14,1%2$cjne de%2$cmov r9,r13%2$ccall _dprintf%2$c%2$cmov rax,0x2000006%2$cpop rdi%2$csyscall%2$c%2$center 0,0%2$csub rsp,32%2$clea rsi,[rel compile]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$cmov rdi,rsp%2$ccall _system%2$c%2$clea rsi,[rel execute]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$cmov rdi,rsp%2$ccall _system%2$cleave%2$cret%2$c%2$cde:%2$cdec r13%2$cret%2$c%2$cerror:%2$cmov rdi,1%2$cmov rax,0x2000001%2$csyscall%2$c%2$cend:%2$cmov rdi,0%2$cmov rax,0x2000001%2$csyscall%2$c",0
+msg db "section .data%2$cfile db %3$cSully_%%d.s%3$c,0%2$cbase db %3$cSully_5.s%3$c,0%2$ccompile db %3$cnasm -f macho64 Sully_%%d.s%3$c,0%2$cexecute db %3$cgcc Sully_%%1$d.o -o Sully_%%1$d && ./Sully_%%1$d%3$c,0%2$cmsg db %3$c%1$s%3$c,0%2$c%2$csection .text%2$cglobal start%2$cglobal _main%2$cextern _system%2$cextern _sprintf%2$cextern _dprintf%2$c%2$cstart:%2$c_main:%2$cpush rbp%2$cmov rbp,rsp%2$cmov r14,1%2$cmov r13,%4$d%2$ccall verify%2$csub rsp,16%2$c%2$clea rsi,[rel file]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$c%2$cmov rax,0x2000005%2$cmov rdi,rsp%2$cmov rsi,512+1024+2%2$cmov rdx,0644o%2$csyscall%2$ccmp rax,-1%2$cje error%2$cleave%2$c%2$cpush rax%2$cmov rdi,rax%2$clea rsi,[rel msg]%2$clea rdx,[rel msg]%2$cmov rcx,10%2$cmov r8,34%2$cmov r9,r13%2$ccall _dprintf%2$c%2$cmov rax,0x2000006%2$cpop rdi%2$csyscall%2$c%2$center 0,0%2$csub rsp,32%2$clea rsi,[rel compile]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$cmov rdi,rsp%2$ccall _system%2$c%2$clea rsi,[rel execute]%2$clea rdi,[rel rsp]%2$cmov rdx,r13%2$ccall _sprintf%2$cmov rdi,rsp%2$ccall _system%2$cleave%2$cret%2$c%2$cverify:%2$ccmp r13,0%2$cje end%2$ccmp r14,1%2$cje de%2$cret%2$c%2$cde:%2$cdec r13%2$cret%2$c%2$cerror:%2$cmov rdi,1%2$cmov rax,0x2000001%2$csyscall%2$c%2$cend:%2$cmov rdi,0%2$cmov rax,0x2000001%2$csyscall%2$c",0
 
 section .text
 global start
@@ -15,11 +16,10 @@ start:
 _main:
 push rbp
 mov rbp,rsp
-sub rsp,16
 mov r14,0
 mov r13,5
-cmp r13,-1
-je end
+call verify
+sub rsp,16
 
 lea rsi,[rel file]
 lea rdi,[rel rsp]
@@ -41,8 +41,6 @@ lea rsi,[rel msg]
 lea rdx,[rel msg]
 mov rcx,10
 mov r8,34
-cmp r14,1
-je de
 mov r9,r13
 call _dprintf
 
@@ -66,6 +64,13 @@ call _sprintf
 mov rdi,rsp
 call _system
 leave
+ret
+
+verify:
+cmp r13,0
+je end
+cmp r14,1
+je de
 ret
 
 de:
